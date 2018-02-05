@@ -36,4 +36,4 @@ Then, a server is running on your local machine shown in your terminal.
 * [Luc ANDRE](https://github.com/lucandreiut)
 * [Quentin DELAMARRE](https://github.com/windos757)
 * [Allan DEMARBRE](https://github.com/demarbre1u)
-* [Nacera ELIAS](https://github.com/EliasNacera
+* [Nacera ELIAS](https://github.com/EliasNacera)
