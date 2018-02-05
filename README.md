@@ -37,3 +37,9 @@ Then, a server is running on your local machine shown in your terminal.
 * [Quentin DELAMARRE](https://github.com/windos757)
 * [Allan DEMARBRE](https://github.com/demarbre1u)
 * [Nacera ELIAS](https://github.com/EliasNacera)
+
+# Available routes
+
+## Series
+
+Display the list of all available series : localhost:8080/geoquizzapi/api/series
