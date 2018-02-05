@@ -1,7 +1,9 @@
 package org.entity;
 
 import java.io.Serializable;
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
@@ -9,6 +11,7 @@ import javax.validation.constraints.NotNull;
 public class Serie implements Serializable {
 
     @Id
+    @GeneratedValue
     private String id;
     @NotNull
     private String ville;
