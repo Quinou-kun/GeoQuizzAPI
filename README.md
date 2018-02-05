@@ -42,4 +42,12 @@ Then, a server is running on your local machine shown in your terminal.
 
 ## Series
 
-Display the list of all available series : localhost:8080/geoquizzapi/api/series
+Display the list of all available series : localhost:8080/geoquizzapi/api/series (GET)
+
+Create a new serie : localhost:8080/geoquizzapi/api/series (POST) 
+```json
+{
+	"mapOptions":"lat;lng;zoom",
+	"ville":"nancy"
+}
+```

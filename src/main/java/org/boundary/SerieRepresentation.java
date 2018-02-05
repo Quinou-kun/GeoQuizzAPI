@@ -1,15 +1,13 @@
 package org.boundary;
 
-import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.json.Json;
-import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonValue;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -20,8 +18,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import org.entity.Serie;
 
@@ -37,8 +33,14 @@ public class SerieRepresentation {
     @Context
     UriInfo uriInfo;
 
+    /**
+     * 
+     *  Route permettant de récupérer la liste des séries
+     * 
+     */
+
     @GET
-    public Response getPosts() 
+    public Response getSeries() 
     {
         JsonObject json = Json.createObjectBuilder()
                 .add("series", buildSeriesArray())
@@ -66,9 +68,44 @@ public class SerieRepresentation {
             .add("id", s.getId())
             .add("ville", s.getVille())
             .add("mapOptions", s.getMapOptions())
-            .add("distance", s.getDistance())
             .build();
 
 		return json;
-	}
+    }
+    
+    /**
+     * 
+     *  Route permettant de récupérer une série
+     * 
+     */
+
+    @GET
+    @Path("{id}")
+    public Response getSerie(@PathParam("id") String id) 
+    {
+        Serie s = serieResource.findById(id);
+
+        if(s == null) return Response.status(Response.Status.BAD_REQUEST).build();
+
+        return Response.ok(buildSerieJson(s)).build();
+    }
+
+     /**
+     * 
+     *  Route permettant d'ajouter une série
+     * 
+     */
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createSerie(@Valid Serie serie)
+    {
+        serieResource.save(serie);
+        System.out.println("uuid = " + serie.getId());
+        System.out.println("mapInfos = " + serie.getMapOptions());
+
+        return Response.ok().build();
+    }
+     
 }
