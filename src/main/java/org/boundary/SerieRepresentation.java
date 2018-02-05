@@ -1,6 +1,8 @@
 package org.boundary;
 
+import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.json.Json;
@@ -11,6 +13,7 @@ import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -18,7 +21,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-
+import org.entity.Photo;
 import org.entity.Serie;
 
 @Stateless
@@ -29,6 +32,9 @@ public class SerieRepresentation {
 
     @Inject
     SerieResource serieResource;
+
+    @Inject
+    PhotoResource photoResource;
     
     @Context
     UriInfo uriInfo;
@@ -68,12 +74,37 @@ public class SerieRepresentation {
             .add("id", s.getId())
             .add("ville", s.getVille())
             .add("mapOptions", s.getMapOptions())
+            .add("photos", buildJsonForPhotos(s))
             .build();
 
 		return json;
     }
     
-    /**
+    private JsonValue buildJsonForPhotos(Serie s) 
+    {
+        JsonArrayBuilder jab = Json.createArrayBuilder();
+
+        for(Photo p : s.getPhotos())
+        {
+            jab.add(buildJsonForPhoto(p));
+        }
+
+        return jab.build();
+	}
+
+    private JsonValue buildJsonForPhoto(Photo p) 
+    {
+        JsonValue json = Json.createObjectBuilder()
+            .add("id", p.getId())
+            .add("desc", p.getDescription())
+            .add("position", p.getPosition())
+            .add("url", p.getUrl())
+            .build();
+
+		return json;
+	}
+
+	/**
      * 
      *  Route permettant de récupérer une série
      * 
@@ -101,11 +132,36 @@ public class SerieRepresentation {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createSerie(@Valid Serie serie)
     {
+        serie.setId(UUID.randomUUID().toString());
         serieResource.save(serie);
-        System.out.println("uuid = " + serie.getId());
-        System.out.println("mapInfos = " + serie.getMapOptions());
 
-        return Response.ok().build();
+        URI uri = uriInfo.getBaseUriBuilder().path("series/" + serie.getId()).build();
+
+        return Response.created(uri).build();
     }
+
+     /**
+     * 
+     *  Route permettant d'ajouter une photo à une série
+     * 
+     */
      
+    @PUT
+    @Path("{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addPhotoToSerie(@PathParam("id") String id, @Valid Photo photo)
+    {
+        Serie serie = serieResource.findById(id);
+        if(serie == null)
+            return Response.status(Response.Status.BAD_REQUEST).build();
+
+        photo.setId(UUID.randomUUID().toString());
+        photo.setSerie(serie);
+        Photo newOne = photoResource.save(photo);
+
+        URI uri = uriInfo.getBaseUriBuilder().path("series/" + serie.getId()).build();        
+
+        return Response.ok().location(uri).build();
+    }
 }

@@ -51,3 +51,12 @@ Create a new serie : localhost:8080/geoquizzapi/api/series (POST)
 	"ville":"nancy"
 }
 ```
+
+Add a photo to a serie : localhost:8080/geoquizzapi/api/series (PUT) 
+```json
+{
+	"description":"desc",
+	"position":"lat;lng",
+	"url":"www.test.fr"
+}
+```

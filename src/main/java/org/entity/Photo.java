@@ -3,7 +3,10 @@ package org.entity;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -17,6 +20,8 @@ public class Photo implements Serializable
     private String position;
     @NotNull
     private String url;
+    @ManyToOne(fetch=FetchType.LAZY)
+    private Serie serie;
 
     public Photo() {}
 
@@ -50,5 +55,13 @@ public class Photo implements Serializable
     
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Serie getSerie() {
+        return serie;
+    }
+
+    public void setSerie(Serie serie) {
+        this.serie = serie;
     }
 }
