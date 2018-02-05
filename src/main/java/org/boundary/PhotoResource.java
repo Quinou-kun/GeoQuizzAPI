@@ -8,26 +8,26 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
-import org.entity.Serie;
+import org.entity.Photo;
 
 @Stateless
 @Transactional
-public class SerieResource {
+public class PhotoResource {
 
     @PersistenceContext
     EntityManager em;
 
-    public Serie findById(String id) {
-        return this.em.find(Serie.class, id);
+    public Photo findById(String id) {
+        return this.em.find(Photo.class, id);
     }
 
-    public List<Serie> findAll() {
-        Query q = this.em.createQuery("SELECT s FROM Serie s");
+    public List<Photo> findAll() {
+        Query q = this.em.createQuery("SELECT p FROM Photo p");
         q.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
         return q.getResultList();
     }
 
-    public Serie save(Serie p) {
+    public Photo save(Photo p) {
         return this.em.merge(p);
     }
 }
