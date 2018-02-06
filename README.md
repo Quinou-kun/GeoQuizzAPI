@@ -42,9 +42,9 @@ Then, a server is running on your local machine shown in your terminal.
 
 ## Series
 
-Display the list of all available series : localhost:8080/geoquizzapi/api/series (GET)
+Display the list of all available series : http://localhost:8080/geoquizzapi/api/series (GET)
 
-Create a new serie : localhost:8080/geoquizzapi/api/series (POST) 
+Create a new serie : http://localhost:8080/geoquizzapi/api/series (POST) 
 ```json
 {
 	"mapOptions":"lat;lng;zoom",
@@ -52,7 +52,7 @@ Create a new serie : localhost:8080/geoquizzapi/api/series (POST)
 }
 ```
 
-Add a photo to a serie : localhost:8080/geoquizzapi/api/series (PUT) 
+Add a photo to a serie : http://localhost:8080/geoquizzapi/api/series (PUT) 
 ```json
 {
 	"description":"desc",
@@ -63,8 +63,8 @@ Add a photo to a serie : localhost:8080/geoquizzapi/api/series (PUT)
 
 ## Games
 
-To create a new game : localhost:8080/geoquizzapi/api/games?idSerie=__[uidSerie]__&playerName=__[playerName]__ (POST). __playerName__ defaults to "Anonyme" if not specified
+To create a new game : http://localhost:8080/geoquizzapi/api/games?idSerie=__[uidSerie]__&playerName=__[playerName]__ (POST). __playerName__ defaults to "Anonyme" if not specified
 
-To update a game and change its status : localhost:8080/geoquizzapi/api/games/uidGame?token=__[token]__&score=__[score]__ (PUT), where __token__ is the token of the game
+To update a game and change its status : http://localhost:8080/geoquizzapi/api/games/uidGame?token=__[token]__&score=__[score]__ (PUT), where __token__ is the token of the game
 
-To see the list of all finished games of a specified serie : localhost:8080/geoquizzapi/api/games?idSerie=__[idSerie]__ (GET)
+To see the list of all finished games of a specified serie : http://localhost:8080/geoquizzapi/api/games?idSerie=__[idSerie]__ (GET)
