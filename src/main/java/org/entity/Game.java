@@ -3,7 +3,9 @@ package org.entity;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -20,6 +22,8 @@ public class Game implements Serializable
     private int score; 
     @NotNull
     private String player;
+    @ManyToOne(fetch=FetchType.LAZY)
+    private Serie serie;
 
     public Game() {}
 
@@ -69,5 +73,13 @@ public class Game implements Serializable
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public Serie getSerie() {
+        return serie;
+    }
+
+    public void setSerie(Serie serie) {
+        this.serie = serie;
     }
 }

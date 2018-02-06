@@ -60,3 +60,7 @@ Add a photo to a serie : localhost:8080/geoquizzapi/api/series (PUT)
 	"url":"www.test.fr"
 }
 ```
+
+## Games
+
+To create a new game : localhost:8080/geoquizzapi/api/games?idSerie=__[uidSerie]__&playerName=__[playerName]__ (POST). __playerName__ defaults to "Anonyme" if not specified
