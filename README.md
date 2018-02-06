@@ -63,8 +63,8 @@ Add a photo to a serie : http://localhost:8080/geoquizzapi/api/series (PUT)
 
 ## Games
 
-To create a new game : http://localhost:8080/geoquizzapi/api/games?idSerie=__[uidSerie]__&playerName=__[playerName]__ (POST). __playerName__ defaults to "Anonyme" if not specified
+To create a new game : http://localhost:8080/geoquizzapi/api/games?idSerie=[uidSerie]&playerName=[playerName] (POST). __playerName__ defaults to "Anonyme" if not specified
 
-To update a game and change its status : http://localhost:8080/geoquizzapi/api/games/uidGame?token=__[token]__&score=__[score]__ (PUT), where __token__ is the token of the game
+To update a game and change its status : http://localhost:8080/geoquizzapi/api/games/uidGame?token=[token]&score=[score] (PUT), where __token__ is the token of the game
 
-To see the list of all finished games of a specified serie : http://localhost:8080/geoquizzapi/api/games?idSerie=__[idSerie]__ (GET)
+To see the list of all finished games of a specified serie : http://localhost:8080/geoquizzapi/api/games?idSerie=[idSerie] (GET)
