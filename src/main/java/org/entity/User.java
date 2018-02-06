@@ -53,7 +53,7 @@ public class User implements Serializable {
         this.links.add(new Link(rel, uri));
     }
 
-    //constructeur vide pour JPA 
+    //constructeur vide  
     public Utilisateur() {
     }
     
