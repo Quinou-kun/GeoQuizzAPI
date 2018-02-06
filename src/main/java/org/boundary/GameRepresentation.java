@@ -114,5 +114,34 @@ public class GameRepresentation {
         }
 
 		return jab.build();
-	}
+    }
+    
+    /**
+     * 
+     *  Route permettant de mettre à jour une partie en passant son status à "fini"
+     * 
+     */
+
+    @PUT
+    @Path("{id}")
+    public Response updateGame(@DefaultValue("") @PathParam("id") String id,
+                                @DefaultValue("") @QueryParam("token") String token)
+    {
+        Game game = gameResource.findById(id);
+
+        if(game == null) return Response.status(Response.Status.NOT_FOUND).build();
+
+        if(game.getToken().equals(token) && game.getStatus().equals("en cours"))
+        {
+            game.setStatus("fini");
+
+            URI uri = uriInfo.getAbsolutePathBuilder().build();
+
+            return Response.ok().location(uri).build();        
+        }
+        else
+        {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
 }

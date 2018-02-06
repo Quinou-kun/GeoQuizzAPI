@@ -116,7 +116,7 @@ public class SerieRepresentation {
     {
         Serie s = serieResource.findById(id);
 
-        if(s == null) return Response.status(Response.Status.BAD_REQUEST).build();
+        if(s == null) return Response.status(Response.Status.NOT_FOUND).build();
 
         return Response.ok(buildSerieJson(s)).build();
     }
@@ -154,7 +154,7 @@ public class SerieRepresentation {
     {
         Serie serie = serieResource.findById(id);
         if(serie == null)
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.NOT_FOUND).build();
 
         photo.setId(UUID.randomUUID().toString());
         photo.setSerie(serie);
