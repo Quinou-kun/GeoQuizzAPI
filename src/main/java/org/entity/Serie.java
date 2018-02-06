@@ -19,6 +19,8 @@ public class Serie implements Serializable
     private String mapOptions;
     @OneToMany(mappedBy="serie")
     private List<Photo> photos = new ArrayList<Photo>();
+    @OneToMany(mappedBy="serie")
+    private List<Game> games = new ArrayList<Game>();
 
     public Serie() {}
 
@@ -52,5 +54,13 @@ public class Serie implements Serializable
 
     public void setVille(String ville) {
         this.ville = ville;
+    }
+
+    public List<Game> getGames() {
+        return games;
+    }
+
+    public void setGames(List<Game> games) {
+        this.games = games;
     }
 }
