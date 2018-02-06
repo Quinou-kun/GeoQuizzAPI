@@ -67,4 +67,4 @@ To create a new game : localhost:8080/geoquizzapi/api/games?idSerie=__[uidSerie]
 
 To update a game and change its status : localhost:8080/geoquizzapi/api/games/uidGame?token=__[token]__&score=__[score]__ (PUT), where __token__ is the token of the game
 
-To see the list of all finished games : localhost:8080/geoquizzapi/api/games (GET)
+To see the list of all finished games of a specified serie : localhost:8080/geoquizzapi/api/games?idSerie=__[idSerie]__ (GET)

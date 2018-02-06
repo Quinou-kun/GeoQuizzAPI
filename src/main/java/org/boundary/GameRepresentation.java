@@ -155,16 +155,20 @@ public class GameRepresentation {
      */
 
     @GET
-    public Response getFinishedGames()
+    public Response getFinishedGames(@DefaultValue("") @QueryParam("idSerie") String idSerie)
     {
+        Serie s = serieResource.findById(idSerie);
+
+        if(s == null) return Response.status(Response.Status.NOT_FOUND).build();
+
         JsonObject json = Json.createObjectBuilder()
-            .add("games", buildJsonForGames())
+            .add("games", buildJsonForGames(idSerie))
             .build();
 
         return Response.ok(json).build();
     }
 
-    private JsonValue buildJsonForGames() 
+    private JsonValue buildJsonForGames(String idSerie) 
     {
         JsonArrayBuilder jab = Json.createArrayBuilder();
 
@@ -172,14 +176,17 @@ public class GameRepresentation {
 
         for(Game g : games)
         {
-            JsonObject json = Json.createObjectBuilder()
-                .add("id", g.getId())
-                .add("nb_photos", g.getNbPhotos())
-                .add("player", g.getPlayer())
-                .add("score", g.getScore())
-                .build();
+            if(g.getSerie().getId().equals(idSerie) && g.getStatus().equals("fini"))
+            {
+                JsonObject json = Json.createObjectBuilder()
+                    .add("id", g.getId())
+                    .add("nb_photos", g.getNbPhotos())
+                    .add("player", g.getPlayer())
+                    .add("score", g.getScore())
+                    .build();
 
-            jab.add(json);
+                jab.add(json);
+            }
         }
 
 		return jab.build();
