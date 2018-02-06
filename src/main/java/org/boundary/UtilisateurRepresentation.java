@@ -1,7 +1,7 @@
-package org.lpro.boundary;
+package org.boundary;
 
 
-import control.KeyManagement;
+import org.control.KeyManagement;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.net.URI;
@@ -27,14 +27,14 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import org.lpro.entity.Utilisateur;
+import org.entity.Utilisateur;
 import org.mindrot.jbcrypt.BCrypt;
 
-@Path("/user")
+@Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Stateless
-public class UserRepresentation {
+public class UtilisateurRepresentation {
 
  
     
@@ -55,12 +55,12 @@ public class UserRepresentation {
      * 
      */
     @POST
-    public Response addUser(User user, @Context UriInfo uriInfo) {
+    public Response addUser(Utilisateur user, @Context UriInfo uriInfo) {
         
         try
         {
     
-            User ut = this.UserRessource.save(user);
+            Utilisateur ut = this.UserRessource.save(user);
             URI uri = uriInfo.getAbsolutePathBuilder().path(ut.getId()).build();
             String fullname = ut.getfullName();
             String email = ut.getEmail();
@@ -85,14 +85,14 @@ public class UserRepresentation {
     @POST
     @Path("/login")
    
-      public Response login(User ut) throws Exception {
+      public Response login(Utilisateur ut) throws Exception {
         
         try
         {
             String email = ut.getEmail();
             String mdp = ut.getPassword();
             
-            User user = this.UserRessource.findByEmail(email) ;   
+            Utilisateur user = this.UserRessource.findByEmail(email) ;   
             String mdpBD = user.getPassword();
             if(!BCrypt.checkpw(mdp,mdpBD)) 
             {     

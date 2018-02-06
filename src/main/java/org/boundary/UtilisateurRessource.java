@@ -1,15 +1,15 @@
-package org.lpro.boundary;
-import control.PasswordManagement;
+package org.boundary;
+import org.control.PasswordManagement;
 import java.util.UUID;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import org.lpro.entity.Utilisateur;
+import org.entity.Utilisateur;
 
 
 @Stateless
-public class UserRessource {
+public class UtilisateurRessource {
     
     @PersistenceContext
     EntityManager em;
@@ -19,8 +19,8 @@ public class UserRessource {
      * @param id
      * @return user
      */
-    public User findById(String id) {
-        return this.em.find(User.class, id);
+    public Utilisateur findById(String id) {
+        return this.em.find(Utilisateur.class, id);
     }
     
     /**
@@ -28,7 +28,7 @@ public class UserRessource {
      * @param user for save
      * @return user
      */
-    public User save(User user) {
+    public Utilisateur save(Utilisateur user) {
         user.setId(UUID.randomUUID().toString());
         user.setPassword(PasswordManagement.digestPassword(user.getPassword()));
         return this.em.merge(user);
@@ -39,11 +39,11 @@ public class UserRessource {
      * @param adresse mail user
      * @return user or exception
      */
-     public User findByEmail(String mail) {
+     public Utilisateur findByEmail(String mail) {
         Query query;
-        query = em.createQuery("SELECT c FROM User c WHERE c.email LIKE :monmail");
+        query = em.createQuery("SELECT c FROM Utilisateur c WHERE c.email LIKE :monmail");
         query.setParameter("monmail", mail); 
-        User user = (User) query.getSingleResult();
+        Utilisateur user = (Utilisateur) query.getSingleResult();
         return user;
     }
 

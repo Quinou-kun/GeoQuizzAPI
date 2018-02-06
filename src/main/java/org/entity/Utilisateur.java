@@ -1,4 +1,4 @@
-package org.lpro.entity;
+package org.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 
-public class User implements Serializable {
+public class Utilisateur implements Serializable {
     
     
     private static final long serialVersionUID = 1L;
@@ -38,6 +38,7 @@ public class User implements Serializable {
     private int user_rol = 0 ;
 
    
+    /*
     @XmlElement(name="_links")
     @Transient 
     private List<Link>  links = new ArrayList<>();
@@ -52,6 +53,7 @@ public class User implements Serializable {
         
         this.links.add(new Link(rel, uri));
     }
+    */
 
     //constructeur vide  
     public Utilisateur() {
