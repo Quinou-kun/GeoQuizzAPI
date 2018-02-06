@@ -1,6 +1,8 @@
 package org.boundary;
 
 import java.net.URI;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import javax.ejb.Stateless;
@@ -173,6 +175,15 @@ public class GameRepresentation {
         JsonArrayBuilder jab = Json.createArrayBuilder();
 
         List<Game> games = gameResource.findAll();
+
+        Collections.sort(games, new Comparator<Game>() {
+            @Override
+            public int compare(Game game1, Game game2)
+            {
+    
+                return game2.getScore() - game1.getScore();
+            }
+        });
 
         for(Game g : games)
         {
