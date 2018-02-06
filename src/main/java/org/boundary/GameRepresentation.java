@@ -74,9 +74,45 @@ public class GameRepresentation {
 
         JsonValue json = Json.createObjectBuilder()
             .add("id", newGame.getId())
+            .add("nb_photos",newGame.getNbPhotos())
+            .add("player", newGame.getPlayer())
+            .add("score", newGame.getScore())
+            .add("status", newGame.getStatus())
             .add("token", newGame.getToken())
+            .add("serie", buildJsonForSerie(s))
             .build();
 
         return Response.ok(json).header("Location", uri).build();
     }
+
+    private JsonValue buildJsonForSerie(Serie s) 
+    {
+        JsonObject json = Json.createObjectBuilder()
+            .add("id", s.getId())
+            .add("ville", s.getVille())
+            .add("mapOptions", s.getMapOptions())
+            .add("photos", buildJsonForPhotos(s))
+            .build();
+
+        return json;
+    }
+
+    private JsonValue buildJsonForPhotos(Serie s) 
+    {
+        JsonArrayBuilder jab = Json.createArrayBuilder();
+
+        for(Photo p : s.getPhotos())
+        {
+            JsonObject json = Json.createObjectBuilder()
+                .add("id", p.getId())
+                .add("desc", p.getDescription())
+                .add("position", p.getPosition())
+                .add("url", p.getUrl())
+                .build();
+            
+            jab.add(json);
+        }
+
+		return jab.build();
+	}
 }
