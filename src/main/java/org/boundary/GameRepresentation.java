@@ -1,6 +1,8 @@
 package org.boundary;
 
 import java.net.URI;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import javax.ejb.Stateless;
@@ -8,6 +10,7 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -125,7 +128,8 @@ public class GameRepresentation {
     @PUT
     @Path("{id}")
     public Response updateGame(@DefaultValue("") @PathParam("id") String id,
-                                @DefaultValue("") @QueryParam("token") String token)
+                                @DefaultValue("") @QueryParam("token") String token, 
+                                @QueryParam("score") int score)
     {
         Game game = gameResource.findById(id);
 
@@ -134,6 +138,7 @@ public class GameRepresentation {
         if(game.getToken().equals(token) && game.getStatus().equals("en cours"))
         {
             game.setStatus("fini");
+            game.setScore(score);
 
             URI uri = uriInfo.getAbsolutePathBuilder().build();
 
@@ -144,4 +149,57 @@ public class GameRepresentation {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
+
+    /**
+     * 
+     *  Route permettant de récupérer les infos des games "fini", notamment pour leur score
+     * 
+     */
+
+    @GET
+    public Response getFinishedGames(@DefaultValue("") @QueryParam("idSerie") String idSerie)
+    {
+        Serie s = serieResource.findById(idSerie);
+
+        if(s == null) return Response.status(Response.Status.NOT_FOUND).build();
+
+        JsonObject json = Json.createObjectBuilder()
+            .add("games", buildJsonForGames(idSerie))
+            .build();
+
+        return Response.ok(json).build();
+    }
+
+    private JsonValue buildJsonForGames(String idSerie) 
+    {
+        JsonArrayBuilder jab = Json.createArrayBuilder();
+
+        List<Game> games = gameResource.findAll();
+
+        Collections.sort(games, new Comparator<Game>() {
+            @Override
+            public int compare(Game game1, Game game2)
+            {
+    
+                return game2.getScore() - game1.getScore();
+            }
+        });
+
+        for(Game g : games)
+        {
+            if(g.getSerie().getId().equals(idSerie) && g.getStatus().equals("fini"))
+            {
+                JsonObject json = Json.createObjectBuilder()
+                    .add("id", g.getId())
+                    .add("nb_photos", g.getNbPhotos())
+                    .add("player", g.getPlayer())
+                    .add("score", g.getScore())
+                    .build();
+
+                jab.add(json);
+            }
+        }
+
+		return jab.build();
+	}
 }
