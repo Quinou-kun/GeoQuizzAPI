@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
@@ -125,7 +126,8 @@ public class GameRepresentation {
     @PUT
     @Path("{id}")
     public Response updateGame(@DefaultValue("") @PathParam("id") String id,
-                                @DefaultValue("") @QueryParam("token") String token)
+                                @DefaultValue("") @QueryParam("token") String token, 
+                                @QueryParam("score") int score)
     {
         Game game = gameResource.findById(id);
 
@@ -134,6 +136,7 @@ public class GameRepresentation {
         if(game.getToken().equals(token) && game.getStatus().equals("en cours"))
         {
             game.setStatus("fini");
+            game.setScore(score);
 
             URI uri = uriInfo.getAbsolutePathBuilder().build();
 
@@ -144,4 +147,41 @@ public class GameRepresentation {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
+
+    /**
+     * 
+     *  Route permettant de récupérer les infos des games "fini", notamment pour leur score
+     * 
+     */
+
+    @GET
+    public Response getFinishedGames()
+    {
+        JsonObject json = Json.createObjectBuilder()
+            .add("games", buildJsonForGames())
+            .build();
+
+        return Response.ok(json).build();
+    }
+
+    private JsonValue buildJsonForGames() 
+    {
+        JsonArrayBuilder jab = Json.createArrayBuilder();
+
+        List<Game> games = gameResource.findAll();
+
+        for(Game g : games)
+        {
+            JsonObject json = Json.createObjectBuilder()
+                .add("id", g.getId())
+                .add("nb_photos", g.getNbPhotos())
+                .add("player", g.getPlayer())
+                .add("score", g.getScore())
+                .build();
+
+            jab.add(json);
+        }
+
+		return jab.build();
+	}
 }
