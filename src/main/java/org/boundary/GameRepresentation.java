@@ -10,9 +10,7 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
-import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -110,7 +108,7 @@ public class GameRepresentation {
                 .add("id", p.getId())
                 .add("desc", p.getDescription())
                 .add("position", p.getPosition())
-                .add("url", p.getUrl())
+                .add("img", p.getUrl())
                 .build();
             
             jab.add(json);
