@@ -124,35 +124,35 @@ public class SerieRepresentation<FormContentDisposition> {
 
     @GET
     @Path("{id}")
-    public Response getSerie(@PathParam("id") String id) 
+    public Response getSerie(@PathParam("id") String id, @QueryParam("size") int size) 
     {
         Serie s = serieResource.findById(id);
 
         if(s == null) return Response.status(Response.Status.NOT_FOUND).build();
 
-        return Response.ok(buildSerieRandomJson(s)).build();
+        return Response.ok(buildSerieRandomJson(s, size)).build();
     }
 
-    private JsonValue buildSerieRandomJson(Serie s) 
+    private JsonValue buildSerieRandomJson(Serie s, int size) 
     {
         JsonValue json = Json.createObjectBuilder()
             .add("id", s.getId())
             .add("ville", s.getVille())
             .add("mapOptions", s.getMapOptions())
-            .add("photos", buildJsonForRandomPhotos(s))
+            .add("photos", buildJsonForRandomPhotos(s, size))
             .build();
 
 		return json;
     }
 
-    private JsonValue buildJsonForRandomPhotos(Serie s) 
+    private JsonValue buildJsonForRandomPhotos(Serie s, int size) 
     {
         JsonArrayBuilder jab = Json.createArrayBuilder();
 
         List<Photo> photos = s.getPhotos();
         Collections.shuffle(photos);
 
-        int limit = 10;
+        int limit = (size > 0) ? size : 10;
 
         for(int i = 0 ; (i < photos.size() && i < limit) ; i++)
         {
