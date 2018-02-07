@@ -41,7 +41,7 @@ Then, a server is running on your local machine shown in your terminal.
 
 Display the list of all available series : http://localhost:8080/geoquizzapi/api/series (GET)
 
-Display the information on a given series, with 10 photos at most in a random order : http://localhost:8080/geoquizzapi/api/series/uidSerie (GET)
+Display the information on a given series : http://localhost:8080/geoquizzapi/api/series/uidSerie?size=[size] (GET), where __[size]__ is the number of photos to be fetched. If size <= 0, then it defaults to 10. Photos are given in a random order
 
 __(ADMIN)__ Create a new serie : http://localhost:8080/geoquizzapi/api/series (POST)
 
@@ -52,7 +52,7 @@ __(ADMIN)__ Create a new serie : http://localhost:8080/geoquizzapi/api/series (P
 }
 ```
 
-__(ADMIN)__ Add a photo to a serie : http://localhost:8080/geoquizzapi/api/series/uidSerie?desc=[desc]&pos=[pos] (POST), whiel sending an image via a form 
+__(ADMIN)__ Add a photo to a serie : http://localhost:8080/geoquizzapi/api/series/uidSerie?desc=[desc]&pos=[pos] (POST), while sending an image via a form 
 
 ## Games
 
