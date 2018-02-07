@@ -44,6 +44,8 @@ Then, a server is running on your local machine shown in your terminal.
 
 Display the list of all available series : http://localhost:8080/geoquizzapi/api/series (GET)
 
+Display the information on a given series, with 10 photos at most in a random order : http://localhost:8080/geoquizzapi/api/series/uidSerie (GET)
+
 Create a new serie : http://localhost:8080/geoquizzapi/api/series (POST) 
 ```json
 {

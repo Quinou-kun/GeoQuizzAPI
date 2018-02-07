@@ -96,7 +96,7 @@ public class PhotoRepresentation
         String filename = file.getName();
 
         ResponseBuilder responseBuilder = Response.ok((Object) file);
-        responseBuilder.header("Content-Disposition", "attachment; filename=\"" + filename + "\"");
+        //responseBuilder.header("Content-Disposition", "attachment; filename=\"" + filename + "\"");
         
         return responseBuilder.build();
     }
