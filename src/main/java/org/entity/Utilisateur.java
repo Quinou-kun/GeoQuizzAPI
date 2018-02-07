@@ -17,57 +17,21 @@ public class Utilisateur implements Serializable {
     
     
     private static final long serialVersionUID = 1L;
-
     @Id
-    private String id;
-    
+    private String id;    
     private String password;
-
-   
-    private String fullName;
-    
-    
+    private String fullname;
     @Column(unique = true)
     private String email;
-    
-    // 0 pour les utilisateurs et 1 pour les admins
-    private int user_rol = 0 ;
 
-   
-    /*
-    @XmlElement(name="_links")
-    @Transient 
-    private List<Link>  links = new ArrayList<>();
-    
-    public List<Link> getLinks() {
-        
-        return links;
-    }
-    
-    
-    public void addLink(String uri, String rel) {
-        
-        this.links.add(new Link(rel, uri));
-    }
-    */
-
-    //constructeur vide  
-    public Utilisateur() {
-    }
+    public Utilisateur() {}
     
     public Utilisateur(String email , String fullName, String password) {
         this.email = email;
-        this.fullName = fullName;
-        this.password = password;
-        //this.password = password;
-        
+        this.fullname = fullName;
+        this.password = password;        
     }
 
-    public int getUserType()
-    {
-        return user_rol;
-    }
-    
     public String getId() {
         return id;
     }
@@ -76,23 +40,21 @@ public class Utilisateur implements Serializable {
         this.id = id;
     }
     
-    
-    //Getters et setters 
     public String getfullName()
     {
-        return fullName;
+        return fullname;
     }
     
     public void setfullName(String fullName)
     {
-        this.fullName = fullName;
+        this.fullname = fullName;
     }
    
-    
     public void setPassword(String password)
     {
         this.password = password;
-    } 
+    }
+
     public String getPassword()
     {
         return password;
@@ -102,6 +64,5 @@ public class Utilisateur implements Serializable {
     {
         return email;
     }
-
 }
 

@@ -34,6 +34,7 @@ import org.entity.Photo;
 import org.entity.Serie;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.provider.Secured;
 
 @Stateless
 @Consumes(MediaType.APPLICATION_JSON)
@@ -168,6 +169,7 @@ public class SerieRepresentation<FormContentDisposition> {
      */
 
     @POST
+    @Secured
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createSerie(@Valid Serie serie)
@@ -187,6 +189,7 @@ public class SerieRepresentation<FormContentDisposition> {
      */
      
     @POST
+    @Secured
     @Path("{id}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
