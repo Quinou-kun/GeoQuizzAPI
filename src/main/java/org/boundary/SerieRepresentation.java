@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -128,8 +129,37 @@ public class SerieRepresentation<FormContentDisposition> {
 
         if(s == null) return Response.status(Response.Status.NOT_FOUND).build();
 
-        return Response.ok(buildSerieJson(s)).build();
+        return Response.ok(buildSerieRandomJson(s)).build();
     }
+
+    private JsonValue buildSerieRandomJson(Serie s) 
+    {
+        JsonValue json = Json.createObjectBuilder()
+            .add("id", s.getId())
+            .add("ville", s.getVille())
+            .add("mapOptions", s.getMapOptions())
+            .add("photos", buildJsonForRandomPhotos(s))
+            .build();
+
+		return json;
+    }
+
+    private JsonValue buildJsonForRandomPhotos(Serie s) 
+    {
+        JsonArrayBuilder jab = Json.createArrayBuilder();
+
+        List<Photo> photos = s.getPhotos();
+        Collections.shuffle(photos);
+
+        int limit = 10;
+
+        for(int i = 0 ; (i < photos.size() && i < limit) ; i++)
+        {
+            jab.add(buildJsonForPhoto(photos.get(i)));
+        }
+
+        return jab.build();
+	}
 
      /**
      * 
