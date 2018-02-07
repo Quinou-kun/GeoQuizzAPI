@@ -37,3 +37,31 @@ Then, a server is running on your local machine shown in your terminal.
 * [Quentin DELAMARRE](https://github.com/windos757)
 * [Allan DEMARBRE](https://github.com/demarbre1u)
 * [Nacera ELIAS](https://github.com/EliasNacera)
+
+# Available routes
+
+## Series
+
+Display the list of all available series : http://localhost:8080/geoquizzapi/api/series (GET)
+
+Create a new serie : http://localhost:8080/geoquizzapi/api/series (POST) 
+```json
+{
+	"mapOptions":"lat;lng;zoom",
+	"ville":"nancy"
+}
+```
+
+Add a photo to a serie : http://localhost:8080/geoquizzapi/api/series/uidSerie?desc=[desc]&pos=[pos] (POST), whiel sending an image via a form 
+
+## Games
+
+To create a new game : http://localhost:8080/geoquizzapi/api/games?idSerie=[uidSerie]&playerName=[playerName] (POST). __playerName__ defaults to "Anonyme" if not specified
+
+To update a game and change its status : http://localhost:8080/geoquizzapi/api/games/uidGame?token=[token]&score=[score] (PUT), where __token__ is the token of the game
+
+To see the list of all finished games of a specified serie : http://localhost:8080/geoquizzapi/api/games?idSerie=[idSerie] (GET)
+
+## Photos
+
+Get the image of a given photo : http://localhost:8080/geoquizzapi/api/photos/uidPhoto (GET)

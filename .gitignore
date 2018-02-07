@@ -39,3 +39,9 @@ Thumbs.db
 # Ideas #
 #########
 .idea/
+.project
+.classpath
+
+# Maven dependencies #
+######################
+target/
