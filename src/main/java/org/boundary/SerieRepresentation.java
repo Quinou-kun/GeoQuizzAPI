@@ -208,6 +208,17 @@ public class SerieRepresentation<FormContentDisposition> {
         {
             MultivaluedMap<String, String> headers = ip.getHeaders();
             String filename = getFileName(headers);
+
+            // On regarde le type de fichier
+            String[] contentTypeHeader = headers.getFirst("Content-Type").split(";");
+        
+            for(String s : contentTypeHeader)
+            {
+                if(! (s.contains("image/jpeg") || s.contains("image/png") || s.contains("image/gif") || s.contains("image/bmp")) ) 
+                {
+                    return Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE).build();
+                }
+            }
             
             try 
             {
@@ -267,12 +278,12 @@ public class SerieRepresentation<FormContentDisposition> {
     private String getFileName(MultivaluedMap<String, String> headers) 
     {
         String[] contenuHeader = headers.getFirst("Content-Disposition").split(";");
-        
+
         for (String filename : contenuHeader) {
             if ((filename.trim().startsWith("filename"))) {
                 String[] name = filename.split("=");
                 return name[1].trim().replaceAll("\"", "");
-            }
+            }            
         }
         
         return "inconnu";
