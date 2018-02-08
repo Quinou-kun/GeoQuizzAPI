@@ -21,6 +21,8 @@ public class Game implements Serializable
     private String status;
     private int score; 
     @NotNull
+    private String mode;
+    @NotNull
     private String player;
     @ManyToOne(fetch=FetchType.LAZY)
     private Serie serie;
@@ -31,6 +33,14 @@ public class Game implements Serializable
         return id;
     }
     
+    public String getMode() {
+        return mode;
+    }
+    
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
     public int getNbPhotos() {
         return nbPhotos;
     }
