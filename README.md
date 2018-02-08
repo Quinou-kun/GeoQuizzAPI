@@ -47,8 +47,8 @@ __(ADMIN)__ Create a new serie : http://localhost:8080/geoquizzapi/api/series (P
 
 ```json
 {
-"mapOptions":"lat;lng;zoom",
-"ville":"nancy"
+  "mapOptions":"lat;lng;zoom",
+  "ville":"nancy"
 }
 ```
 
@@ -71,9 +71,11 @@ Get the image of a given photo : http://localhost:8080/geoquizzapi/api/photos/ui
 Create a user : http://localhost:8080/geoquizzapi/api/users (POST)
 
 ```json
-"password":"test",
-"fullname":"test",
-"email":"test@test.fr"
+{
+  "password":"test",
+  "fullname":"test",
+  "email":"test@test.fr"
+}
 ```
 
 Login : http://localhost:8080/geoquizzapi/api/users?email=[email]&password=[password (GET)]
