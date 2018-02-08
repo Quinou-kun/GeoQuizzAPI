@@ -206,30 +206,37 @@ public class SerieRepresentation<FormContentDisposition> {
         List<InputPart> inputParts = formulaire.get("file");
         
         Photo photo = new Photo();
+        photo.setId(UUID.randomUUID().toString());
 
         for (InputPart ip : inputParts) 
         {
             MultivaluedMap<String, String> headers = ip.getHeaders();
-            String filename = getFileName(headers);
+            String filename = photo.getId();
 
             // On regarde le type de fichier
             String[] contentTypeHeader = headers.getFirst("Content-Type").split(";");
         
+            String format = "";
             for(String s : contentTypeHeader)
             {
                 if(! (s.contains("image/jpeg") || s.contains("image/png") || s.contains("image/gif") || s.contains("image/bmp")) ) 
                 {
                     return Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE).build();
                 }
+
+                if(s.contains("image/jpeg")) format = ".jpg";
+                if(s.contains("image/png")) format = ".png";
+                if(s.contains("image/gif")) format = ".gif";
+                if(s.contains("image/bmp")) format = ".bmp";
             }
             
             try 
             {
                 InputStream is = ip.getBody(InputStream.class,null);
                 byte[] bytes = SerieRepresentation.toByteArray(is);
-                writeFile(bytes,"/opt/jboss/wildfly/standalone/tmp/"+filename);
+                writeFile(bytes,"/opt/jboss/wildfly/standalone/tmp/" + filename + format);
 
-                photo.setUrl("/opt/jboss/wildfly/standalone/tmp/"+filename);
+                photo.setUrl("/opt/jboss/wildfly/standalone/tmp/"+filename + format);
             } 
             catch (IOException ioe) 
             {
@@ -237,7 +244,6 @@ public class SerieRepresentation<FormContentDisposition> {
             }
         }
 
-        photo.setId(UUID.randomUUID().toString());
         photo.setDescription(desc);
         photo.setPosition(pos);
         photo.setSerie(serie);
@@ -278,6 +284,7 @@ public class SerieRepresentation<FormContentDisposition> {
         fop.close();
     }
 
+    /*
     private String getFileName(MultivaluedMap<String, String> headers) 
     {
         String[] contenuHeader = headers.getFirst("Content-Disposition").split(";");
@@ -291,4 +298,5 @@ public class SerieRepresentation<FormContentDisposition> {
         
         return "inconnu";
     }
+    */
 }
