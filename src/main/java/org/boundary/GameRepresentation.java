@@ -53,7 +53,8 @@ public class GameRepresentation {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSeries(@DefaultValue("") @QueryParam("idSerie") String idSerie) 
+    public Response getSeries(@DefaultValue("") @QueryParam("idSerie") String idSerie,
+                                @DefaultValue("0") @QueryParam("mode") String mode) 
     {
         if(idSerie.isEmpty()) return Response.status(Response.Status.BAD_REQUEST).build();
 
@@ -65,6 +66,7 @@ public class GameRepresentation {
         newGame.setPlayer("None");
         newGame.setScore(0);
         newGame.setStatus("en cours");
+        newGame.setMode(mode);
         newGame.setToken(new RandomToken().randomString(20));
         newGame.setSerie(s);
 
@@ -78,6 +80,7 @@ public class GameRepresentation {
             .add("player", newGame.getPlayer())
             .add("score", newGame.getScore())
             .add("status", newGame.getStatus())
+            .add("mode", newGame.getMode())
             .add("token", newGame.getToken())
             .add("serie", buildJsonForSerie(s))
             .build();
@@ -156,20 +159,21 @@ public class GameRepresentation {
      */
 
     @GET
-    public Response getFinishedGames(@DefaultValue("") @QueryParam("idSerie") String idSerie)
+    public Response getFinishedGames(@DefaultValue("") @QueryParam("idSerie") String idSerie,
+                                        @QueryParam("mode") String mode)
     {
         Serie s = serieResource.findById(idSerie);
 
         if(s == null) return Response.status(Response.Status.NOT_FOUND).build();
 
         JsonObject json = Json.createObjectBuilder()
-            .add("games", buildJsonForGames(idSerie))
+            .add("games", buildJsonForGames(idSerie, mode))
             .build();
 
         return Response.ok(json).build();
     }
 
-    private JsonValue buildJsonForGames(String idSerie) 
+    private JsonValue buildJsonForGames(String idSerie, String mode) 
     {
         JsonArrayBuilder jab = Json.createArrayBuilder();
 
@@ -186,7 +190,7 @@ public class GameRepresentation {
 
         for(Game g : games)
         {
-            if(g.getSerie().getId().equals(idSerie) && g.getStatus().equals("fini"))
+            if(g.getSerie().getId().equals(idSerie) && g.getStatus().equals("fini") && g.getMode().equals(mode))
             {
                 JsonObject json = Json.createObjectBuilder()
                     .add("id", g.getId())
