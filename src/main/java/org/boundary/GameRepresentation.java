@@ -53,8 +53,7 @@ public class GameRepresentation {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSeries(@DefaultValue("") @QueryParam("idSerie") String idSerie, 
-                                @DefaultValue("Anonyme") @QueryParam("playerName") String playerName) 
+    public Response getSeries(@DefaultValue("") @QueryParam("idSerie") String idSerie) 
     {
         if(idSerie.isEmpty()) return Response.status(Response.Status.BAD_REQUEST).build();
 
@@ -63,7 +62,7 @@ public class GameRepresentation {
         Game newGame = new Game();
         newGame.setId(UUID.randomUUID().toString());
         newGame.setNbPhotos(s.getPhotos().size());
-        newGame.setPlayer(playerName);
+        newGame.setPlayer("None");
         newGame.setScore(0);
         newGame.setStatus("en cours");
         newGame.setToken(new RandomToken().randomString(20));
@@ -127,7 +126,8 @@ public class GameRepresentation {
     @Path("{id}")
     public Response updateGame(@DefaultValue("") @PathParam("id") String id,
                                 @DefaultValue("") @QueryParam("token") String token, 
-                                @QueryParam("score") int score)
+                                @QueryParam("score") int score,
+                                @DefaultValue("Anonyme") @QueryParam("playerName") String playerName)
     {
         Game game = gameResource.findById(id);
 
@@ -137,6 +137,7 @@ public class GameRepresentation {
         {
             game.setStatus("fini");
             game.setScore(score);
+            game.setPlayer(playerName);
 
             URI uri = uriInfo.getAbsolutePathBuilder().build();
 
