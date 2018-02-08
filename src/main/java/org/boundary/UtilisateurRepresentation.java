@@ -118,7 +118,7 @@ public class UtilisateurRepresentation
                 .setSubject(email)
                 .setIssuer(uriInfo.getAbsolutePath().toString())
                 .setIssuedAt(new Date())
-                .setExpiration(toDate(LocalDateTime.now().plusMinutes(5L)))
+                .setExpiration(toDate(LocalDateTime.now().plusMinutes(30L)))
                 .signWith(SignatureAlgorithm.HS512, key)
                 .compact();
 
