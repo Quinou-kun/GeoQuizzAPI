@@ -249,7 +249,7 @@ public class SerieRepresentation<FormContentDisposition> {
         photo.setSerie(serie);
         photoResource.save(photo);
 
-        URI uri = uriInfo.getBaseUriBuilder().path("series/" + serie.getId()).build();
+        URI uri = uriInfo.getBaseUriBuilder().path("photos/" + serie.getId()).build();
 
         return Response.status(200).location(uri).build();
     }
