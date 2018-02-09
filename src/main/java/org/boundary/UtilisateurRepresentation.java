@@ -72,7 +72,7 @@ public class UtilisateurRepresentation
             URI uri = uriInfo.getAbsolutePathBuilder().path(ut.getId()).build();
 
             return Response.created(uri)
-                    .entity(json).header("Access-Control-Allow-Origin", "*")
+                    .entity(json)
                     .build();
         }
         catch (Exception e) 
