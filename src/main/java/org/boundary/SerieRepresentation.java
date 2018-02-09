@@ -251,7 +251,8 @@ public class SerieRepresentation<FormContentDisposition> {
 
         URI uri = uriInfo.getBaseUriBuilder().path("photos/" + serie.getId()).build();
 
-        return Response.status(200).location(uri).build();
+        
+        return Response.created(uri).entity(buildJsonForPhoto(photo)).build();
     }
 
     public static byte[] toByteArray(InputStream is) throws IOException 
