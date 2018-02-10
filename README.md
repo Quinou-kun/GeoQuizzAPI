@@ -1,3 +1,5 @@
+<p align="center"><img src="https://raw.githubusercontent.com/lucandreiut/GeoQuizzAdmin/develop/src/assets/logo/logo.png"/></p>
+
 # GeoQuizzAPI
 
 This project is an API that's been developed during the "Atelier 2" week of the CISIIE professionnal licence in 2017-2018, along with a [Web app](https://github.com/Quinou-kun/GeoQuizzApp) and an [Admin client](https://github.com/lucandreiut/GeoQuizzAdmin).
