@@ -1,31 +1,35 @@
-<p align="center"><img src="https://raw.githubusercontent.com/lucandreiut/GeoQuizzAdmin/develop/src/assets/logo/logo.png"/></p>
+# GeoQuizzAPI
 
-# API
+This project is an API that's been developed during the "Atelier 2" week of the CISIIE professionnal licence in 2017-2018, along with a [Web app](https://github.com/Quinou-kun/GeoQuizzApp) and an [Admin client](https://github.com/lucandreiut/GeoQuizzAdmin).
 
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
+
 ```
-* 
-* 
+* Docker
+* Java
+* Maven 
 ```
+
 ### Installing and Running
 
-In order to run the project, use he following commands
+In order to run the project, use the following commands
 
 ```
-* 
-* 
+* mvn clean build
+* mv geoquizzapi.war [the directory where your docker-compose.yml is]/deployments/
+* cd [the directory where your docker-compose.yml is]
+* sudo docker-compose up
 ```
 
-Then, a server is running on your local machine shown in your terminal.
-
+Then, you should have two Docker containers running, that your Web app should now be able to access.
 
 ## Built With
 
-* [VueJs](https://github.com/vuejs/vue) (example)
+* Java JEE (JAX RS)
 
 # Creators
 
