@@ -179,7 +179,7 @@ public class SerieRepresentation<FormContentDisposition> {
 
         URI uri = uriInfo.getBaseUriBuilder().path("series/" + serie.getId()).build();
 
-        return Response.created(uri).build();
+        return Response.created(uri).entity(buildSerieJson(serie)).build();
     }
 
      /**
@@ -284,20 +284,4 @@ public class SerieRepresentation<FormContentDisposition> {
         fop.flush();
         fop.close();
     }
-
-    /*
-    private String getFileName(MultivaluedMap<String, String> headers) 
-    {
-        String[] contenuHeader = headers.getFirst("Content-Disposition").split(";");
-
-        for (String filename : contenuHeader) {
-            if ((filename.trim().startsWith("filename"))) {
-                String[] name = filename.split("=");
-                return name[1].trim().replaceAll("\"", "");
-            }            
-        }
-        
-        return "inconnu";
-    }
-    */
 }
