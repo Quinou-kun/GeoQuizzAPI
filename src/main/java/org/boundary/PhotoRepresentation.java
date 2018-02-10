@@ -82,7 +82,7 @@ public class PhotoRepresentation
     @GET
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces({"image/jpeg", "image/png"})
+    @Produces({"image/jpeg", "image/png", "image/gif", "image/bmp"})
     public Response getImgPhoto(@PathParam("id") String uid)
     {
         if(uid == null || uid.isEmpty()) return Response.status(Response.Status.BAD_REQUEST).build();
@@ -93,10 +93,7 @@ public class PhotoRepresentation
 
         File file = new File(photo.getUrl());
  
-        String filename = file.getName();
-
         ResponseBuilder responseBuilder = Response.ok((Object) file);
-        responseBuilder.header("Content-Disposition", "attachment; filename=\"" + filename + "\"");
         
         return responseBuilder.build();
     }

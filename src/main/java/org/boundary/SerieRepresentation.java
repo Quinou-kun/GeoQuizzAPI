@@ -34,6 +34,7 @@ import org.entity.Photo;
 import org.entity.Serie;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.provider.Secured;
 
 @Stateless
 @Consumes(MediaType.APPLICATION_JSON)
@@ -123,35 +124,35 @@ public class SerieRepresentation<FormContentDisposition> {
 
     @GET
     @Path("{id}")
-    public Response getSerie(@PathParam("id") String id) 
+    public Response getSerie(@PathParam("id") String id, @QueryParam("size") int size) 
     {
         Serie s = serieResource.findById(id);
 
         if(s == null) return Response.status(Response.Status.NOT_FOUND).build();
 
-        return Response.ok(buildSerieRandomJson(s)).build();
+        return Response.ok(buildSerieRandomJson(s, size)).build();
     }
 
-    private JsonValue buildSerieRandomJson(Serie s) 
+    private JsonValue buildSerieRandomJson(Serie s, int size) 
     {
         JsonValue json = Json.createObjectBuilder()
             .add("id", s.getId())
             .add("ville", s.getVille())
             .add("mapOptions", s.getMapOptions())
-            .add("photos", buildJsonForRandomPhotos(s))
+            .add("photos", buildJsonForRandomPhotos(s, size))
             .build();
 
 		return json;
     }
 
-    private JsonValue buildJsonForRandomPhotos(Serie s) 
+    private JsonValue buildJsonForRandomPhotos(Serie s, int size) 
     {
         JsonArrayBuilder jab = Json.createArrayBuilder();
 
         List<Photo> photos = s.getPhotos();
         Collections.shuffle(photos);
 
-        int limit = 10;
+        int limit = (size > 0) ? size : 10;
 
         for(int i = 0 ; (i < photos.size() && i < limit) ; i++)
         {
@@ -168,6 +169,7 @@ public class SerieRepresentation<FormContentDisposition> {
      */
 
     @POST
+    @Secured
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createSerie(@Valid Serie serie)
@@ -177,7 +179,7 @@ public class SerieRepresentation<FormContentDisposition> {
 
         URI uri = uriInfo.getBaseUriBuilder().path("series/" + serie.getId()).build();
 
-        return Response.created(uri).build();
+        return Response.created(uri).entity(buildSerieJson(serie)).build();
     }
 
      /**
@@ -187,6 +189,7 @@ public class SerieRepresentation<FormContentDisposition> {
      */
      
     @POST
+    @Secured
     @Path("{id}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
@@ -203,19 +206,37 @@ public class SerieRepresentation<FormContentDisposition> {
         List<InputPart> inputParts = formulaire.get("file");
         
         Photo photo = new Photo();
+        photo.setId(UUID.randomUUID().toString());
 
         for (InputPart ip : inputParts) 
         {
             MultivaluedMap<String, String> headers = ip.getHeaders();
-            String filename = getFileName(headers);
+            String filename = photo.getId();
+
+            // On regarde le type de fichier
+            String[] contentTypeHeader = headers.getFirst("Content-Type").split(";");
+        
+            String format = "";
+            for(String s : contentTypeHeader)
+            {
+                if(! (s.contains("image/jpeg") || s.contains("image/png") || s.contains("image/gif") || s.contains("image/bmp")) ) 
+                {
+                    return Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE).build();
+                }
+
+                if(s.contains("image/jpeg")) format = ".jpg";
+                if(s.contains("image/png")) format = ".png";
+                if(s.contains("image/gif")) format = ".gif";
+                if(s.contains("image/bmp")) format = ".bmp";
+            }
             
             try 
             {
                 InputStream is = ip.getBody(InputStream.class,null);
                 byte[] bytes = SerieRepresentation.toByteArray(is);
-                writeFile(bytes,"/opt/jboss/wildfly/standalone/tmp/"+filename);
+                writeFile(bytes,"/opt/jboss/wildfly/standalone/tmp/" + filename + format);
 
-                photo.setUrl("/opt/jboss/wildfly/standalone/tmp/"+filename);
+                photo.setUrl("/opt/jboss/wildfly/standalone/tmp/"+filename + format);
             } 
             catch (IOException ioe) 
             {
@@ -223,15 +244,15 @@ public class SerieRepresentation<FormContentDisposition> {
             }
         }
 
-        photo.setId(UUID.randomUUID().toString());
         photo.setDescription(desc);
         photo.setPosition(pos);
         photo.setSerie(serie);
         photoResource.save(photo);
 
-        URI uri = uriInfo.getBaseUriBuilder().path("series/" + serie.getId()).build();
+        URI uri = uriInfo.getBaseUriBuilder().path("photos/" + serie.getId()).build();
 
-        return Response.status(200).location(uri).build();
+        
+        return Response.created(uri).entity(buildJsonForPhoto(photo)).build();
     }
 
     public static byte[] toByteArray(InputStream is) throws IOException 
@@ -262,19 +283,5 @@ public class SerieRepresentation<FormContentDisposition> {
         fop.write(contenu);
         fop.flush();
         fop.close();
-    }
-
-    private String getFileName(MultivaluedMap<String, String> headers) 
-    {
-        String[] contenuHeader = headers.getFirst("Content-Disposition").split(";");
-        
-        for (String filename : contenuHeader) {
-            if ((filename.trim().startsWith("filename"))) {
-                String[] name = filename.split("=");
-                return name[1].trim().replaceAll("\"", "");
-            }
-        }
-        
-        return "inconnu";
     }
 }
